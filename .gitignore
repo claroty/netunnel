@@ -1,0 +1,7 @@
+*.pyc
+netunnel.egg-info/*
+netunnel.conf
+build/*
+dist/*
+.idea
+venv/

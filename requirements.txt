@@ -1,0 +1,7 @@
+aiohttp<4.0.0
+aiofiles
+pymongo  # We need the bson packaged provided by pymongo
+marshmallow
+cryptography
+colorama
+click
