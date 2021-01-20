@@ -21,6 +21,7 @@ _DEFAULT_CONFIG = {
     'peers': [],
     'allow_unverified_ssl_peers': False,
     'revision': 1
+    # secret_key is not provided here so it won't be dynamically stored in the configuration file by mistake
 }
 ENV_VARIABLES_PREFIX = 'NETUNNEL_'
 

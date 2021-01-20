@@ -81,13 +81,16 @@ The configuration file is in JSON format and support the following keys:
 - `allowed_tunnel_destinations` - A key-value mapping of IPs and ports(as strings separated by comma) allowed to be
 used as a tunnel's exit sockets. The special symbol `*` supported to allow all ports for a certain IP.
 Defaults to `{"127.0.0.1": "*"}`
-- `secret_key` - A string used as an encryption key for sensitive settings to avoid storing them in the disk as plain text.
-The key is generated automatically. If you wish to decrypt, encrypt, or generate a key manually, see
-`python -m netunnel.common.security`.
+- `secret_key` - A passphrase used as an encryption key for sensitive settings to avoid storing them in the disk as plain text.
+The key is generated automatically, but we recommend using the `-s`/`--secret-key` when running the server which will avoid
+storing the key in the configuration file. Setting the environment variable `NETUNNEL_SECRET_KEY` will behave just the
+same as the flag, and won't be stored in the configuration. If you wish to decrypt, encrypt, or generate a key manually, see
+`python -m netunnel.common.security`. 
 - `peers` - A list of remote NETunnel servers that can be used to set static tunnels (See `Peers` in the Additional Features).
 For an example of how to set a peer, look at [examples/server-server](examples/server-server).
 - `allow_unverified_ssl_peers` - When set to `true`, remote peers certificates won't be verified. Defaults to `false`.
-- `revision` - Currently unused. This will be used for configuration migrations purposes.
+- `revision` - Currently unused. This will be used for configuration migrations purposes. You should not modify
+this field manually in any use case.
 - `http_proxy` - Settings for an optional global HTTP proxy to use for any requests the server may need to make, for
 example to remote peers. The setting include a key-value mapping of the following:
     - `proxy_url` - The URL to the remote proxy server
