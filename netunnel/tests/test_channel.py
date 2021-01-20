@@ -36,6 +36,7 @@ def test_api_response():
 class MockWSMsg:
     data = None
 
+
 class MockWebsocket:
     def __init__(self):
         self.closed = False
@@ -65,6 +66,7 @@ class MockWebsocket:
 
 
 async def test_channel():
+    # Test flow of client-server channel
     async def echo_handler(msg: channel.ChannelMessage) -> channel.ChannelResponse:
         return msg.get_valid_response(msg.data)
 
