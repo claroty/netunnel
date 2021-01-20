@@ -68,6 +68,34 @@ InputTunnel is initialized with a feeder of websockets that the client/server pr
 that the implementation can be generic. In reverse tunnels, The server uses the channel to request
 the client for a new websocket when it needs to feed a new websocket.
 
+## Server Configurations
+The server's configuration file is optional, but recommended in production environments.
+
+When running the NETunnel server, you can provide a path to a configuration file using `-c` or `--config-path` flags,
+and the server will generate a default configuration file at that location.
+If there is an existing configuration in that path, the server will load it, and merge it with its default
+configurations, and for any change that was made dynamically to the server using the API, it will commit it to
+the configuration file.
+
+The configuration file is in JSON format and support the following keys:
+- `allowed_tunnel_destinations` - A key-value mapping of IPs and ports(as strings separated by comma) allowed to be
+used as a tunnel's exit sockets. The special symbol `*` supported to allow all ports for a certain IP.
+Defaults to `{"127.0.0.1": "*"}`
+- `secret_key` - A string used as an encryption key for sensitive settings to avoid storing them in the disk as plain text.
+The key is generated automatically. If you wish to decrypt, encrypt, or generate a key manually, see
+`python -m netunnel.common.security`.
+- `peers` - A list of remote NETunnel servers that can be used to set static tunnels (See `Peers` in the Additional Features).
+For an example of how to set a peer, look at [examples/server-server](examples/server-server).
+- `allow_unverified_ssl_peers` - When set to `true`, remote peers certificates won't be verified. Defaults to `false`.
+- `revision` - Currently unused. This will be used for configuration migrations purposes.
+- `http_proxy` - Settings for an optional global HTTP proxy to use for any requests the server may need to make, for
+example to remote peers. The setting include a key-value mapping of the following:
+    - `proxy_url` - The URL to the remote proxy server
+    - `username` - An encrypted (using the `secret_key`) username string
+    - `password` - An encrypted (using the `secret_key`) password string
+
+An example for a configuration file: [examples/netunnel.example.conf](examples/netunnel.example.conf)
+
 ## Additional Features
 * Peers - A NETunnel server can register remote NETunnel servers called peers. The peers are stored in the
 configuration and can be used to create static tunnels.
