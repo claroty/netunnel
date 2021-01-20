@@ -68,6 +68,50 @@ InputTunnel is initialized with a feeder of websockets that the client/server pr
 that the implementation can be generic. In reverse tunnels, The server uses the channel to request
 the client for a new websocket when it needs to feed a new websocket.
 
+## Server Configurations
+The server's configuration file is optional, but recommended in production environments.
+
+When running the NETunnel server, you can provide a path to a configuration file using `-c` or `--config-path` flags,
+and the server will generate a default configuration file at that location.
+If there is an existing configuration in that path, the server will load it, and merge it with its default
+configurations, and for any change that was made dynamically to the server using the API, it will commit it to
+the configuration file.
+
+The configuration file is in JSON format and support the following keys:
+- `allowed_tunnel_destinations` - A key-value mapping of IPs and ports(as strings separated by comma) allowed to be
+used as a tunnel's exit sockets. The special symbol `*` supported to allow all ports for a certain IP.
+Defaults to `{"127.0.0.1": "*"}`
+- `secret_key` - A passphrase used as an encryption key for sensitive settings to avoid storing them in the disk as plain text.
+The key is generated automatically, but we recommend using the `-s`/`--secret-key` when running the server which will avoid
+storing the key in the configuration file. Setting the environment variable `NETUNNEL_SECRET_KEY` will behave just the
+same as the flag, and won't be stored in the configuration. If you wish to decrypt, encrypt, or generate a key manually, see
+`python -m netunnel.common.security`. 
+- `peers` - A list of remote NETunnel servers that can be used to set static tunnels (See `Peers` in the Additional Features).
+For an example of how to set a peer, look at [examples/server-server](examples/server-server).
+- `allow_unverified_ssl_peers` - When set to `true`, remote peers certificates won't be verified. Defaults to `false`.
+- `revision` - Currently unused. This will be used for configuration migrations purposes. You should not modify
+this field manually in any use case.
+- `http_proxy` - Settings for an optional global HTTP proxy to use for any requests the server may need to make, for
+example to remote peers. The setting include a key-value mapping of the following:
+    - `proxy_url` - The URL to the remote proxy server
+    - `username` - An encrypted (using the `secret_key`) username string
+    - `password` - An encrypted (using the `secret_key`) password string
+
+A useful feature of NETunnel configuration is that it can parse environment variables on load to modify the default
+values of any key. The configuration will search for variables starting with the prefix `NETUNNEL_`, following by the
+uppercase of any existing key. The value is expected to be in JSON format.
+ 
+For example, in POSIX environments, running:
+```bash
+export NETUNNEL_ALLOWED_TUNNEL_DESTINATIONS='{"127.0.0.1": "22"}'
+export NETUNNEL_ALLOW_UNVERIFIED_SSL_PEERS='true'
+python -m netunnel.server
+```
+Will change the default `allowed_tunnel_destinations` to `{"127.0.0.1": "22"}`
+and the default `allow_unverified_ssl_peers` to `true`.
+
+An example for a configuration file: [examples/netunnel.example.conf](examples/netunnel.example.conf)
+
 ## Additional Features
 * Peers - A NETunnel server can register remote NETunnel servers called peers. The peers are stored in the
 configuration and can be used to create static tunnels.

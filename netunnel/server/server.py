@@ -11,6 +11,7 @@ from .peer import Peer
 from .config import NETunnelConfiguration
 from .client_handler import ChannelHandler
 
+import os
 import json
 import http
 import logging
@@ -58,7 +59,8 @@ def authenticated(async_route_method):
 
 
 class NETunnelServer:
-    def __init__(self, config_path=None, host='127.0.0.1', port=4040, logger=None, auth_server: auth.NETunnelServerAuth = None):
+    def __init__(self, config_path=None, host='127.0.0.1', port=4040, logger=None,
+                 auth_server: auth.NETunnelServerAuth = None, secret_key=None):
         """
         NETunnel server. Listen on host:port and serve clients with tunnels.
         :param config_path: Path to the configuration file. If None, the server won't keep state
@@ -66,6 +68,7 @@ class NETunnelServer:
         :param port: Port to listen on
         :param logger: Optional logger
         :param auth_server: Instance of subclass of netunnel.common.auth.NETunnelServerAuth that will be used for authentication
+        :param secret_key: A secret_key to use instead of generating and storing one in the configuration file
         """
         self._config_path = config_path
         self._host = host
@@ -87,7 +90,7 @@ class NETunnelServer:
         # Used to prevent static tunnel's local port duplications on creation
         self._creating_static_tunnel_lock = asyncio.Lock()
         # This is used to encrypt and decrypt sensitive information
-        self._secret_key = None
+        self._secret_key = secret_key
         self._encryptor: security.Encryptor = None
         self._peer_schema = PeerSchema()
         self._static_tunnel_schema = StaticTunnelSchema()
@@ -147,10 +150,12 @@ class NETunnelServer:
     async def _setup_encryptor(self):
         """
         Initialize the secret key which will be used to encrypt and decrypt sensitive data.
-        ** If the key was given during initializing, we keep it only in memory **
+        ** If the key was provided during initializing, we keep it only in memory **
         """
         if self._secret_key:
             self._encryptor = security.Encryptor(self._secret_key)
+        elif 'NETUNNEL_SECRET_KEY' in os.environ:
+            self._encryptor = security.Encryptor(os.environ['NETUNNEL_SECRET_KEY'])
         elif 'secret_key' in self._config:
             self._encryptor = security.Encryptor(self._config['secret_key'])
         else:
@@ -615,6 +620,8 @@ def main():
     parser.add_argument('-d', '--debug', help="increase log verbosity to debug mode", dest='loglevel', action="store_const",
                         const=logging.DEBUG, default=logging.INFO)
     parser.add_argument('-p', '--port', type=int, help="Port number to listen on", default=4040)
+    parser.add_argument('-s', '--secret-key',
+                        help="A passphrase used for encryption which will not be stored in the configuration file")
     parser.add_argument('--hostname', help="IP address to listen on", default='127.0.0.1')
     parser.add_argument('--auth-plugin', help="Plugin to use for authentication. (e.g. <module_path>.<auth_class_name>)")
     parser.add_argument('--auth-data', default='{}', help="A json dump string of the data required by the authentication plugin")
@@ -627,7 +634,8 @@ def main():
         auth_server = auth_server_class(**json.loads(args.auth_data))
     if args.config_path is None:
         print(f'{Fore.YELLOW}The server is running in stateless mode. Use --config-path to generate a config file{Style.RESET_ALL}')
-    server = NETunnelServer(config_path=args.config_path, logger=logger, port=args.port, auth_server=auth_server)
+    server = NETunnelServer(config_path=args.config_path, logger=logger, port=args.port, auth_server=auth_server,
+                            secret_key=args.secret_key)
     loop = asyncio.get_event_loop()
     try:
         asyncio.ensure_future(server.start())

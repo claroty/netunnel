@@ -9,6 +9,9 @@ import asyncio
 
 class TestStaticTunnels:
     async def test_static_tunnel_startup(self, config_path, aiohttp_unused_port, bytes_data):
+        """
+        Test that static tunnels are working probably on startup
+        """
         server_port = aiohttp_unused_port()
         port_to_tunnel = aiohttp_unused_port()
         server = NETunnelServer(config_path=config_path, port=server_port)
@@ -37,8 +40,11 @@ class TestStaticTunnels:
 
         # Cleanup
         await server.stop()
-#
+
     async def test_static_tunnel_reconnect(self, netunnel_client_server: Tuple[NETunnelClient, NETunnelServer], config_path, aiohttp_unused_port, bytes_data):
+        """
+        Test that static tunnels successfully recreate themselves if there was a disconnection
+        """
         client, server = netunnel_client_server
 
         port = aiohttp_unused_port()

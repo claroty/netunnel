@@ -1,5 +1,5 @@
 -r requirements.txt
-pytest-aiohttp
-pytest
-proxy.py
-pyjwt < 2.0.0
+pytest-aiohttp==0.3.0
+pytest==6.2.0
+proxy.py==2.2.0
+pyjwt==1.7.1

@@ -8,7 +8,7 @@ import functools
 import contextlib
 
 from typing import Dict, List, Any
-from .__version__ import __version__
+from . import __version__
 from .common import auth
 from .common.const import TunnelId, CLIENT_CHANNEL_HEARTBEAT
 from .common.exceptions import NETunnelResponseError, NETunnelNotConnectedError, NETunnelError
