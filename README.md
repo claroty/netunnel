@@ -94,6 +94,19 @@ example to remote peers. The setting include a key-value mapping of the followin
     - `username` - An encrypted (using the `secret_key`) username string
     - `password` - An encrypted (using the `secret_key`) password string
 
+A useful feature of NETunnel configuration is that it can parse environment variables on load to modify the default
+values of any key. The configuration will search for variables starting with the prefix `NETUNNEL_`, following by the
+uppercase of any existing key. The value is expected to be in JSON format.
+ 
+For example, in POSIX environments, running:
+```bash
+export NETUNNEL_ALLOWED_TUNNEL_DESTINATIONS='{"127.0.0.1": "22"}'
+export NETUNNEL_ALLOW_UNVERIFIED_SSL_PEERS='true'
+python -m netunnel.server
+```
+Will change the default `allowed_tunnel_destinations` to `{"127.0.0.1": "22"}`
+and the default `allow_unverified_ssl_peers` to `true`.
+
 An example for a configuration file: [examples/netunnel.example.conf](examples/netunnel.example.conf)
 
 ## Additional Features
