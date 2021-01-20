@@ -64,10 +64,11 @@ class NETunnelConfiguration:
         """
         Initialize config by loading config_path
         """
-        with contextlib.suppress(FileNotFoundError):
-            async with aiofiles.open(self._config_path) as config_file:
-                data = await config_file.read()
-                self._config.update(json.loads(data))
+        if self._config_path:
+            with contextlib.suppress(FileNotFoundError):
+                async with aiofiles.open(self._config_path) as config_file:
+                    data = await config_file.read()
+                    self._config.update(json.loads(data))
         await self.save()
 
     async def save(self):
