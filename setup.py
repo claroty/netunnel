@@ -18,7 +18,8 @@ install_requires = [
     'marshmallow<=3.10.0',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
     'colorama<=0.4.4',
-    'click<=7.2'
+    'click<=7.2',
+    'importlib-metadata>=2.0.0,<=3.4.0'
 ]
 
 setup(
