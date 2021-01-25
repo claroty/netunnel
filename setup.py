@@ -19,14 +19,14 @@ install_requires = [
     'cryptography>=2.8',
     'colorama<=0.4.4',
     'click<=7.2',
-    'importlib-metadata>=2.0.0,<=3.4.0'
+    'importlib-metadata<=3.4.0'
 ]
 
 setup(
     name="netunnel",
-    version='1.0.2',
+    version='1.0.3',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
-    long_description=read("README.md"),
+    long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',
     author='Claroty Open Source',
     author_email='opensource@claroty.com',
