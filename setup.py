@@ -24,9 +24,9 @@ install_requires = [
 
 setup(
     name="netunnel",
-    version='1.0.2',
+    version='1.0.3',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
-    long_description=read("README.md"),
+    long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',
     author='Claroty Open Source',
     author_email='opensource@claroty.com',
