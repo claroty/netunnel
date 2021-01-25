@@ -1,7 +1,7 @@
 # Changelog
 ## 1.0.4 (2020-01-25)
 ### Misc
-- Upload LICENSE, CHANGES.md and README.md to PyPi in the package 
+- Include LICENSE, CHANGES.md and README.md in the PyPi package.
 
 ## 1.0.3 (2020-01-25)
 ### Misc
