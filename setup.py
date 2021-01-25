@@ -19,7 +19,7 @@ install_requires = [
     'cryptography>=2.8',
     'colorama<=0.4.4',
     'click<=7.2',
-    'importlib-metadata>=2.0.0,<=3.4.0'
+    'importlib-metadata<=3.4.0'
 ]
 
 setup(
