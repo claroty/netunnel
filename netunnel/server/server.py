@@ -150,7 +150,7 @@ class NETunnelServer:
 
     async def _shutdown_peers(self):
         """
-        Disconnect static tunnels and stop peers
+        Disconnect static tunnels and stop peers.
         """
         while self._peers:
             _, peer = self._peers.popitem()
@@ -159,7 +159,7 @@ class NETunnelServer:
 
     async def _shutdown_client_handlers(self):
         """
-        Disconnect all connected clients
+        Disconnect all connected clients.
         """
         # We convert to list because the items on self.channel_handlers are being removed after each loop
         for channel_id, channel_handler in list(self.channel_handlers.items()):
@@ -392,7 +392,7 @@ class NETunnelServer:
         THIS CANNOT BE UNDONE, PLEASE USE WITH CAUTION
 
         Recreate the configuration file from the defaults.
-        The web won't be restarted, so all currently connected clients won't be disconnected unless
+        The web won't be restarted, so all currently connected channels won't be affected unless
         `disconnect_clients` is True.
         """
         data = await request.json()

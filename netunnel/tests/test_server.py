@@ -92,7 +92,6 @@ class TestNETunnelServer:
         Test that the encryptor is setup correctly before and after it was set again.
         """
         assert 'secret_key' in netunnel_server._config
-        print(netunnel_server._config._config)
         original_auto_generated_secret_key = netunnel_server._config['secret_key']
         await netunnel_server._setup_encryptor()
         assert original_auto_generated_secret_key == netunnel_server._config['secret_key']
