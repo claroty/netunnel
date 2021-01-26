@@ -61,6 +61,14 @@ class NETunnelConfiguration:
         await self._initialize()
         return self
 
+    async def recreate(self):
+        """
+        Recreate the configuration file from the default settings.
+        This will erase the current configurations.
+        """
+        self._config = get_default_config()
+        await self.save()
+
     async def _initialize(self):
         """
         Initialize config by loading config_path

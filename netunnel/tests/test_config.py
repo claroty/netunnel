@@ -77,3 +77,25 @@ async def test_create_config_doesnt_change_allowed_tunnel_destinations(config_pa
     # make sure the config contains the original value and didn't modify it
     assert netunnel_config['allowed_tunnel_destinations'] == test_allowed_destinations
     assert netunnel_config['allowed_tunnel_destinations'] != default_config['allowed_tunnel_destinations']
+
+
+async def test_recreate_config(config_path):
+    """
+    Create a configuration, modify it and make sure recreate return to the default state
+    """
+    default_config = get_default_config()
+    netunnel_config = await config.NETunnelConfiguration.create(config_path=config_path)
+    now_as_string = str(time.time())
+
+    # Add a key, recreate and make sure the config revert to default
+    netunnel_config[now_as_string] = now_as_string
+    await netunnel_config.recreate()
+    assert netunnel_config._config == default_config
+
+    # Make sure recreate keep configurations from environment variables
+    some_key = next(iter(default_config.keys()))
+    env_var_name = ENV_VARIABLES_PREFIX + some_key.upper()
+    with environment_variables({env_var_name: now_as_string}):
+        default_config = get_default_config()
+        await netunnel_config.recreate()
+        assert netunnel_config._config == default_config
