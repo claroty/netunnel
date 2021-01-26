@@ -151,9 +151,8 @@ class NETunnelClient:
     @connection_established
     async def factory_reset(self, disconnect_clients=False):
         """
-        Erase and recreate the configurations on the remote
+        Erase and recreate the configurations on the server.
         :param disconnect_clients: Disconnect currently connected clients.
-        :return:
         """
         payload = {
             'disconnect_clients': disconnect_clients

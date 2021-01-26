@@ -92,7 +92,7 @@ async def test_recreate_config(config_path):
     await netunnel_config.recreate()
     assert netunnel_config._config == default_config
 
-    # Make sure recreate keep
+    # Make sure recreate keep configurations from environment variables
     some_key = next(iter(default_config.keys()))
     env_var_name = ENV_VARIABLES_PREFIX + some_key.upper()
     with environment_variables({env_var_name: now_as_string}):
