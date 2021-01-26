@@ -148,6 +148,18 @@ class NETunnelClient:
     async def get_remote_version(self):
         return await self._get('/version', parse_as_text=True, raise_for_status=True)
 
+    @connection_established
+    async def factory_reset(self, disconnect_clients=False):
+        """
+        Erase and recreate the configurations on the remote
+        :param disconnect_clients: Disconnect currently connected clients.
+        :return:
+        """
+        payload = {
+            'disconnect_clients': disconnect_clients
+        }
+        return await self._post('/config/factory-reset', json=payload, raise_for_status=True)
+
     @property
     def connected(self):
         return self._control_channel is not None and self._control_channel.running
