@@ -114,7 +114,8 @@ class NETunnelServer:
             web.get('/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.get_peer_static_tunnel),
             web.delete('/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.delete_peer_static_tunnel),
             web.get('/config/http-proxy', self.get_default_http_proxy),  # Return the default http proxy settings
-            web.post('/config/http-proxy', self.set_default_http_proxy)  # Set the default http proxy
+            web.post('/config/http-proxy', self.set_default_http_proxy),  # Set the default http proxy
+            web.post('/config/factory-reset', self.factory_reset)  # DANGEROUS - Erase and recreate the configurations
         ])
 
     def _get_decrypted_proxy_settings(self):
@@ -147,6 +148,24 @@ class NETunnelServer:
             peer = await self._load_peer_from_config(peer_config, verify_connectivity=False)
             self._peers[peer.id] = peer
 
+    async def _shutdown_peers(self):
+        """
+        Disconnect static tunnels and stop peers
+        """
+        while self._peers:
+            _, peer = self._peers.popitem()
+            self._logger.info('Disconnect peer `%s`', peer.name)
+            await peer.delete_static_tunnels()
+
+    async def _shutdown_client_handlers(self):
+        """
+        Disconnect all connected clients
+        """
+        # We convert to list because the items on self.channel_handlers are being removed after each loop
+        for channel_id, channel_handler in list(self.channel_handlers.items()):
+            self._logger.debug('Closing client handler `%s`', channel_id)
+            await channel_handler.close()
+
     async def _setup_encryptor(self):
         """
         Initialize the secret key which will be used to encrypt and decrypt sensitive data.
@@ -160,9 +179,9 @@ class NETunnelServer:
             self._encryptor = security.Encryptor(self._config['secret_key'])
         else:
             self._logger.info('Generating default secret-key')
-            self._secret_key = security.Encryptor.generate_key().decode()
-            self._encryptor = security.Encryptor(self._secret_key)
-            self._config['secret_key'] = self._secret_key
+            secret_key = security.Encryptor.generate_key().decode()
+            self._encryptor = security.Encryptor(secret_key)
+            self._config['secret_key'] = secret_key
             await self._config.save()
 
     async def _start_web_server(self):
@@ -256,14 +275,8 @@ class NETunnelServer:
         await self._setup_peers()
 
     async def stop(self):
-        while self._peers:
-            _, peer = self._peers.popitem()
-            self._logger.info('Disconnect peer `%s`', peer.name)
-            await peer.delete_static_tunnels()
-        # We convert to list because the items on self.channel_handlers are being removed after each loop
-        for channel_id, channel_handler in list(self.channel_handlers.items()):
-            self._logger.debug('Closing client handler `%s`', channel_id)
-            await channel_handler.close()
+        await self._shutdown_peers()
+        await self._shutdown_client_handlers()
         self._logger.info('Stopping web application')
         await self._stop_web_server()
 
@@ -371,6 +384,24 @@ class NETunnelServer:
         await ws.prepare(request)
         await self.channel_handlers[channel_id].serve_new_connection(ws, tunnel_id)
         return ws
+
+    @authenticated
+    @exceptions_to_json_response
+    async def factory_reset(self, request: web.Request):
+        """
+        THIS CANNOT BE UNDONE, PLEASE USE WITH CAUTION
+
+        Recreate the configuration file from the defaults.
+        The web won't be restarted, so all currently connected clients won't be disconnected unless
+        `disconnect_clients` is True.
+        """
+        data = await request.json()
+        await self._shutdown_peers()
+        await self._config.recreate()
+        await self._setup_encryptor()
+        if data.get('disconnect_clients', False):
+            await self._shutdown_client_handlers()
+        return web.json_response()
 
     @authenticated
     @exceptions_to_json_response
