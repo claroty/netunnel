@@ -15,7 +15,7 @@ install_requires = [
     'aiohttp>=3.5.4,<4.0.0',
     'aiofiles>=0.0.4',
     'pymongo<=3.11.2',
-    'marshmallow<=3.10.0',  # We have temporary backwards compatibility for 2.X, but also support 3.X
+    'marshmallow<4.0.0',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
     'colorama<=0.4.4',
     'click<=7.2',
@@ -24,7 +24,7 @@ install_requires = [
 
 setup(
     name="netunnel",
-    version='1.0.4',
+    version='1.0.5',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
     long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',
