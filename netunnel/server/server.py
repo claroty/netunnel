@@ -148,14 +148,16 @@ class NETunnelServer:
             peer = await self._load_peer_from_config(peer_config, verify_connectivity=False)
             self._peers[peer.id] = peer
 
-    async def _shutdown_peers(self):
+    async def _detach_peers(self):
         """
         Disconnect static tunnels and stop peers.
         """
-        while self._peers:
-            _, peer = self._peers.popitem()
-            self._logger.info('Disconnect peer `%s`', peer.name)
-            await peer.delete_static_tunnels()
+        # We cannot have new peers while we're detaching to avoid race conditions
+        async with self._registering_peer_lock:
+            for peer in list(self._peers.values()):
+                self._logger.info('Disconnect peer `%s`', peer.name)
+                await peer.delete_static_tunnels()
+                del self._peers[peer.id]
 
     async def _shutdown_client_handlers(self):
         """
@@ -275,7 +277,7 @@ class NETunnelServer:
         await self._setup_peers()
 
     async def stop(self):
-        await self._shutdown_peers()
+        await self._detach_peers()
         await self._shutdown_client_handlers()
         self._logger.info('Stopping web application')
         await self._stop_web_server()
@@ -396,7 +398,7 @@ class NETunnelServer:
         `disconnect_clients` is True.
         """
         data = await request.json()
-        await self._shutdown_peers()
+        await self._detach_peers()
         await self._config.recreate()
         await self._setup_encryptor()
         if data.get('disconnect_clients', False):
