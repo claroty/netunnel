@@ -24,7 +24,7 @@ install_requires = [
 
 setup(
     name="netunnel",
-    version='1.0.4',
+    version='1.0.5',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
     long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',
