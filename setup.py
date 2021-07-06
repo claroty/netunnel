@@ -14,12 +14,12 @@ def read(path):
 install_requires = [
     'aiohttp>=3.5.4,<4.0.0',
     'aiofiles>=0.0.4',
-    'pymongo<=3.11.2',
+    'pymongo<=3.11.4',
     'marshmallow<=3.10.0',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
     'colorama<=0.4.4',
-    'click<=7.2',
-    'importlib-metadata<=3.4.0'
+    'click>=7.2',
+    'importlib-metadata<=4.6.1'
 ]
 
 setup(
