@@ -1,27 +1,19 @@
 #!/usr/bin/env python3
-
 from setuptools import setup, find_packages
-
 import pathlib
-
 HERE = pathlib.Path(__file__).parent
-
-
 def read(path):
     return (HERE / path).read_text("utf-8").strip()
-
-
 install_requires = [
     'aiohttp>=3.5.4,<4.0.0',
     'aiofiles>=0.0.4',
-    'pymongo<=3.11.2',
-    'marshmallow<4.0.0',  # We have temporary backwards compatibility for 2.X, but also support 3.X
+    'pymongo>=3.8.0',
+    'marshmallow<=3.12.2',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
-    'colorama<=0.4.4',
-    'click<=7.2',
+    'colorama>=0.2',
+    'click',
     'importlib-metadata<=3.4.0'
 ]
-
 setup(
     name="netunnel",
     version='1.0.5',
