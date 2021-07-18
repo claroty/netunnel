@@ -8,6 +8,7 @@ from netunnel.common.utils import get_logger
 from .utils import ProxyForTests
 from .auth_utils import MockClientAuth, MockServerAuth
 
+import copy
 import json
 import pytest
 
@@ -107,3 +108,27 @@ class TestNETunnelServer:
         async with NETunnelClient(f'http://localhost:{server._port}', auth_client=auth_client, logger=logger) as client:
             await client.get_remote_version()
         await server.stop()
+
+    async def test_factory_reset(self, netunnel_client_server: Tuple[NETunnelClient, NETunnelServer]):
+        client, server = netunnel_client_server
+        changable_config_keys = ['secret_key']
+        original_config = copy.deepcopy(server._config._config)
+
+        # Fill up some data and make sure the configuration got updated
+        await client.register_peer('peer', target_netunnel_url=client.server_url)
+        await client.create_peer_static_tunnel(peer_name='peer', tunnel_remote_port=22)
+        await client.set_server_default_http_proxy(proxy_url='http://127.0.0.1:8899', username='abc', password='abc',
+                                                   check_proxy=False)
+        assert server._config._config != original_config
+
+        # Perform factory reset and make sure it worked as expected
+        await client.factory_reset()
+        new_config = copy.deepcopy(server._config._config)
+        for key in changable_config_keys:
+            assert original_config.pop(key) != new_config.pop(key)
+        assert original_config == new_config
+
+        # Perform factory reset which disconnect all clients
+        assert client.connected
+        await client.factory_reset(disconnect_clients=True)
+        assert not client.connected
