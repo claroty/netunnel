@@ -8,7 +8,7 @@ install_requires = [
     'aiohttp>=3.5.4,<4.0.0',
     'aiofiles>=0.0.4',
     'pymongo>=3.8.0',
-    'marshmallow<=>=2.8,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
+    'marshmallow>=2.8,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
     'colorama>=0.2',
     'click',
