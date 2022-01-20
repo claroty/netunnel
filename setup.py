@@ -9,7 +9,7 @@ install_requires = [
     'aiofiles>=0.0.4',
     'pymongo>=3.11.0',
     'marshmallow>=2.21,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
-    'cryptography~=3.4',
+    'cryptography>=2.8',
     'colorama>=0.4',
     'click',
     'importlib-metadata<=3.4.0'
