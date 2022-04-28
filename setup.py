@@ -5,19 +5,18 @@ HERE = pathlib.Path(__file__).parent
 def read(path):
     return (HERE / path).read_text("utf-8").strip()
 install_requires = [
-    'aiohttp>=3.8.0,<4.0.0',
+    'aiohttp>=3.5.4,<4.0.0',
     'aiofiles>=0.0.4',
-    'pymongo>=3.11.0',
-    'marshmallow>=2.21,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
+    'pymongo>=3.8.0',
+    'marshmallow>=2.8,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
     'cryptography>=2.8',
-    'colorama>=0.4',
+    'colorama>=0.2',
     'click',
     'importlib-metadata<=3.4.0'
 ]
-
 setup(
     name="netunnel",
-    version='1.0.8',
+    version='1.0.9',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
     long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',
