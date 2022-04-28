@@ -6,6 +6,7 @@ import argparse
 import importlib
 import functools
 import contextlib
+import sys
 
 from typing import Dict, List, Any
 from . import __version__
@@ -344,10 +345,14 @@ class NETunnelClient:
         Awaits until the websocket is used up before closing it.
         :param tunnel_id: ID of the tunnel to serve
         """
-        async with (await self._ws_connect(f'/channels/{self._control_channel.id}/tunnels/{tunnel_id}/connect')) as websocket:
-            websocket: EventClientWebSocketResponse
-            await self._tunnels[tunnel_id].feed_websocket(websocket)
-            await websocket.wait_closed()
+        try:
+            async with (await self._ws_connect(f'/channels/{self._control_channel.id}/tunnels/{tunnel_id}/connect')) as websocket:
+                websocket: EventClientWebSocketResponse
+                await self._tunnels[tunnel_id].feed_websocket(websocket)
+                await websocket.wait_closed()
+        except Exception:
+            logging.exception(f"TUNNEL ERROR: Received exception during new websocket connection")
+            sys.exit(1)
 
     @connection_established
     async def list_peers(self) -> List[Any]:
