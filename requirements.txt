@@ -1,4 +1,4 @@
-aiohttp~=3.8
+aiohttp==3.7.3
 aiofiles==0.4.0
 pymongo==3.11.0  # We need the bson packaged provided by pymongo
 marshmallow==2.21.0
