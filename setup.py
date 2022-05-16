@@ -12,7 +12,7 @@ install_requires = [
     'cryptography>=2.8',
     'colorama>=0.2',
     'click',
-    'importlib-metadata<=3.4.0'
+    'importlib-metadata<4'
 ]
 setup(
     name="netunnel",
