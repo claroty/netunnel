@@ -5,6 +5,7 @@ from ..common.exceptions import NETunnelAuthError
 
 import time
 import aiohttp
+import sys
 import logging
 import asyncio
 import contextlib
@@ -155,9 +156,7 @@ class StaticTunnel:
                     self._logger.warning('Failed to authenticate with `%s`', self._client.server_url)
                 else:
                     self._logger.exception('Failed to establish a tunnel with the peer `%s`:', self._client.server_url)
-                self._logger.info('Waiting %s seconds before retrying...', self._connection_retry_interval)
-                await asyncio.sleep(self._connection_retry_interval)
-
+                sys.exit(1)
 
     async def stop(self, force=True):
         """
