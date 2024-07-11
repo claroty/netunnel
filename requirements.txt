@@ -1,8 +1,8 @@
-aiohttp==3.9.5
+aiohttp==3.7.3
 aiofiles==0.4.0
 pymongo==3.11.0  # We need the bson packaged provided by pymongo
 marshmallow==2.21.0
-cryptography==42.0.8
+cryptography==3.2.1
 colorama==0.4.4
 click==7.0
 importlib-metadata==3.10.1
