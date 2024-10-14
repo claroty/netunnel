@@ -100,19 +100,19 @@ class NETunnelServer:
             web.get('/version', self.get_version),
             web.post('/channels', self.create_channel),  # Creates a channel
             web.post('/authenticate', self._auth_server.authenticate),
-            web.get('/channels/{channel_id:\d+}/connect', self.serve_channel),  # Connect the channel (websocket)
-            web.post('/channels/{channel_id:\d+}/tunnels', self.post_tunnel),  # Creates a tunnel
-            web.delete('/channels/{channel_id:\d+}/tunnels/{tunnel_id:\d+}', self.delete_tunnel),  # Delete a tunnel
-            web.get('/channels/{channel_id:\d+}/tunnels/{tunnel_id:\d+}/connect', self.websocket_to_tunnel),  # Feed a tunnel with a websocket
+            web.get(r'/channels/{channel_id:\d+}/connect', self.serve_channel),  # Connect the channel (websocket)
+            web.post(r'/channels/{channel_id:\d+}/tunnels', self.post_tunnel),  # Creates a tunnel
+            web.delete(r'/channels/{channel_id:\d+}/tunnels/{tunnel_id:\d+}', self.delete_tunnel),  # Delete a tunnel
+            web.get(r'/channels/{channel_id:\d+}/tunnels/{tunnel_id:\d+}/connect', self.websocket_to_tunnel),  # Feed a tunnel with a websocket
             web.get('/peers', self.list_peers),
             web.post('/peers', self.register_peer),
-            web.get('/peers/{peer_id:\d+}', self.get_peer),
-            web.post('/peers/{peer_id:\d+}', self.update_peer),
-            web.delete('/peers/{peer_id:\d+}', self.delete_peer),
-            web.get('/peers/{peer_id:\d+}/static_tunnels', self.list_peer_static_tunnels),
-            web.post('/peers/{peer_id:\d+}/static_tunnels', self.create_peer_static_tunnels),
-            web.get('/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.get_peer_static_tunnel),
-            web.delete('/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.delete_peer_static_tunnel),
+            web.get(r'/peers/{peer_id:\d+}', self.get_peer),
+            web.post(r'/peers/{peer_id:\d+}', self.update_peer),
+            web.delete(r'/peers/{peer_id:\d+}', self.delete_peer),
+            web.get(r'/peers/{peer_id:\d+}/static_tunnels', self.list_peer_static_tunnels),
+            web.post(r'/peers/{peer_id:\d+}/static_tunnels', self.create_peer_static_tunnels),
+            web.get(r'/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.get_peer_static_tunnel),
+            web.delete(r'/peers/{peer_id:\d+}/static_tunnels/{static_tunnel_id:\d+}', self.delete_peer_static_tunnel),
             web.get('/config/http-proxy', self.get_default_http_proxy),  # Return the default http proxy settings
             web.post('/config/http-proxy', self.set_default_http_proxy),  # Set the default http proxy
             web.post('/config/factory-reset', self.factory_reset)  # DANGEROUS - Erase and recreate the configurations
