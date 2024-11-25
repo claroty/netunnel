@@ -7,16 +7,16 @@ def read(path):
 install_requires = [
     'aiohttp>=3.9.5,<4.0.0',
     'aiofiles>=0.0.4',
-    'pymongo>=4.8.0',
-    'marshmallow>=2.8,<4',  # We have temporary backwards compatibility for 2.X, but also support 3.X
-    'cryptography>=43.0.0',
+    'pymongo>=3.8.0',
+    'marshmallow>=3.17.0,<4',
+    'cryptography>=41.0.0',
     'colorama>=0.2',
     'click',
     'importlib-metadata<4'
 ]
 setup(
     name="netunnel",
-    version='1.0.12',
+    version='1.0.13',
     description='A tool to create network tunnels over HTTP/S written in Python 3',
     long_description="\n\n".join((read("README.md"), read("CHANGES.md"))),
     long_description_content_type='text/markdown',

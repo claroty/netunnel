@@ -32,9 +32,9 @@ class NETunnelSchema(Schema):
 
 class StaticTunnelSchema(NETunnelSchema):
 	id = fields.Integer()
-	tunnel_remote_address = fields.String(default='127.0.0.1', missing='127.0.0.1')
+	tunnel_remote_address = fields.String(dump_default='127.0.0.1', load_default='127.0.0.1')
 	tunnel_remote_port = fields.Integer(required=True, validate=validate.Range(min=1, max=65535))
-	tunnel_local_address = fields.String(default='127.0.0.1', missing='127.0.0.1')
+	tunnel_local_address = fields.String(dump_default='127.0.0.1', load_default='127.0.0.1')
 	tunnel_local_port = fields.Integer(required=True, validate=validate.Range(min=1, max=65535))
 
 	@pre_load
