@@ -3,3 +3,4 @@ pytest-aiohttp==0.3.0
 pytest==6.2.0
 proxy.py==2.2.0
 pyjwt==1.7.1
+aiohttp>=3.10.11 # not directly required, pinned by Snyk to avoid a vulnerability
