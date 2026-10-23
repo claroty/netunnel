@@ -12,7 +12,7 @@ from ..common.utils import run_blocking_func_in_executor
 # The default config is the basic configuration of the netunnel.
 # In case the configuration already exists, it's performing an update over the default config.
 # This way, in case the default configuration has a new key in some version, it will be added automatically.
-# We don't performing a full recursive merge between the current and the default configuration to protect
+# We don't perform a full recursive merge between the current and the default configuration to protect
 # dict values like 'allowed_tunnel_destination' from being changed unexpectedly.
 _DEFAULT_CONFIG = {
     'allowed_tunnel_destinations': {"127.0.0.1": "*"},
@@ -28,7 +28,7 @@ ENV_VARIABLES_PREFIX = 'NETUNNEL_'
 
 def get_default_config(use_env_vars=True) -> dict:
     """
-    If use_env_vars is True, config values will be override by environment variables if defined.
+    If use_env_vars is True, config values will be overridden by environment variables if defined.
     For example, to override the value of "allowed_tunnel_destinations", export "NETUNNEL_ALLOWED_TUNNEL_DESTINATIONS".
     Environment variables are expected to be in json format, and are usually defined in the systemd service.
     """

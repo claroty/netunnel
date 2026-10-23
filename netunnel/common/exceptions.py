@@ -27,7 +27,7 @@ class NETunnelInvalidProxy(NETunnelError):
 
 class NETunnelServerError(NETunnelError):
     """
-    Used by the server to raise exception and convert them to json responses with a specific http status code bound to them
+    Used by the server to raise exceptions and convert them to json responses with a specific http status code bound to them
     """
     status_code = http.HTTPStatus.INTERNAL_SERVER_ERROR
 
