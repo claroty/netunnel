@@ -33,7 +33,7 @@ class Peer:
         self._proxy_url = proxy_url
         self._proxy_username = proxy_username
         self._proxy_password = proxy_password
-        # mapping from static tunnel id to StaticTunnel object belong to this peer
+        # mapping from static tunnel id to StaticTunnel object belonging to this peer
         self._static_tunnels: Dict[int, StaticTunnel] = {}
         # Used to prevent id duplications when creating new static tunnels
         self._creating_static_tunnel_lock = asyncio.Lock()
@@ -93,7 +93,7 @@ class Peer:
 
     async def verify_connectivity(self):
         """
-        Make sure there is a connection to the peer by query it's version.
+        Make sure there is a connection to the peer by querying its version.
         Raises an exception if peer is not connected
         """
         try:

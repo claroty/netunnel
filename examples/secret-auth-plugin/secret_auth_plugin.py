@@ -1,5 +1,5 @@
 """
-This is an example for NETunnel auth plugin. it enforces clients to include a secret that only the server knows
+This is an example for NETunnel auth plugin. It enforces clients to include a secret that only the server knows
 in order to be authorized with it.
 Please make sure to read netunnel/common/auth.py first so you would understand when each method is called in
 NETunnel's core code.
@@ -18,7 +18,7 @@ class SecretClientAuth(NETunnelClientAuth):
 
 	def __init__(self, secret, *args, **kwargs):
         # The `secret` parameter is exclusive to this plugin. you can declare whatever parameters you need
-        # as long as your users knows what parameters your plugin expects.
+        # as long as your users know what parameters your plugin expects.
 		super().__init__(*args, **kwargs)
 		self._secret = secret
 		self._token = None
@@ -47,7 +47,7 @@ class SecretClientAuth(NETunnelClientAuth):
 
 	def dump_object(self):
         # The return value here is stored as `auth_data` of peers that needs the secret for the next startup.
-        # In a real life use case, you would probably store something else then the secret since it will be written
+        # In a real life use case, you would probably store something else than the secret since it will be written
         # to the disk (for example an encrypted version of it), just make sure __init__ can be initialized with
         # whatever you return here.
 		return {'secret': self._secret}
@@ -58,7 +58,7 @@ class SecretServerAuth(NETunnelServerAuth):
 
 	def __init__(self, secret, *args, **kwargs):
         # The `secret` parameter is exclusive to this plugin. you can declare whatever parameters you need
-        # as long as your users knows what parameters your plugin expects.
+        # as long as your users know what parameters your plugin expects.
 		super().__init__(*args, **kwargs)
 		self._secret = secret
 
